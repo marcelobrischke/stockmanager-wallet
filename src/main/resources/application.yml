@@ -1,0 +1,49 @@
+spring:
+    application:
+        name: stockmanager-wallet
+    jackson.serialization:
+        indent_output: true
+#    jpa:
+#        show-sql: true
+#        hibernate:
+#            ddl-auto: update
+    kafka:
+        #bootstrapAddress: wsl.local:9092
+        consumer:
+            bootstrap-servers: wsl.local:9092
+            auto-offset-reset: earliest
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            #value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer   
+            group-id: group_id
+            properties:
+                spring.json.trusted.packages: "*"
+                spring.json.value.default.type: br.com.mb.stockmanagerbrokerage.kafka.InvoiceMessage
+
+server:
+    port: 8082
+eureka:
+    client:
+         serviceUrl:
+             defaultZone: http://localhost:8761/eureka
+management:
+#    server:
+#        port: 8082
+    endpoint:
+        info:
+            enabled: true        
+        metrics:
+            enabled: true             
+
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+        br.com.mb: DEBUG
+    logstash:
+        enabled: true
+        url: wsl.local:5000
+        #trustStoreLocation: /tmp/location/sample.jks
+        #trustStorePassword: 123456
+        ignorePatterns: /(actuator|swagger|webjars).*
+        logHeaders: true
